@@ -25,6 +25,23 @@ node src/server.js
 
 The server starts on **http://localhost:3054**.
 
+### Authentication
+
+All endpoints require HTTP Basic Auth. Credentials are read from environment variables at startup:
+
+| Variable | Default |
+|----------|---------|
+| `BASIC_AUTH_USER` | `sapuser` |
+| `BASIC_AUTH_PASS` | `Passw0rd!` |
+
+To override the defaults:
+
+```bash
+BASIC_AUTH_USER=myuser BASIC_AUTH_PASS=mypass node src/server.js
+```
+
+Requests without valid credentials receive a `401 Unauthorized` response.
+
 ### Available mock work orders
 
 | Order number   | Description                        | Operations |
@@ -43,7 +60,7 @@ The server starts on **http://localhost:3054**.
 Retrieves a work order by order number. The number is left-padded to 12 digits automatically.
 
 ```bash
-curl http://localhost:3054/RESTAdapter/WO/GetDetails/000004000001
+curl -u sapuser:Passw0rd! http://localhost:3054/RESTAdapter/WO/GetDetails/000004000001
 ```
 
 **Success response** — `RETURN.TYPE` is `"S"`:
@@ -138,7 +155,7 @@ Only `METHOD_TYPE: "CHANGE"` is supported. Changes are held in memory for the li
 **Example — update DESCRIPTION and QUANTITY on operation 0020:**
 
 ```bash
-curl -X POST http://localhost:3054/RESTAdapter/WO/CreateUpdate \
+curl -u sapuser:Passw0rd! -X POST http://localhost:3054/RESTAdapter/WO/CreateUpdate \
   -H "Content-Type: application/json" \
   -d '{
     "METHOD_TYPE": "CHANGE",
@@ -189,13 +206,25 @@ curl -X POST http://localhost:3054/RESTAdapter/WO/CreateUpdate \
 
 - .NET 10 SDK
 
+### Configuration — User Secrets
+
+The tests read credentials from [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets). Before running the tests for the first time, store the credentials (these must match the server's `BASIC_AUTH_USER` / `BASIC_AUTH_PASS`):
+
+```bash
+cd SapBddTests
+dotnet user-secrets set "MockSap:Username" "sapuser"
+dotnet user-secrets set "MockSap:Password" "Passw0rd!"
+```
+
+Secrets are stored in `~/.microsoft/usersecrets/b3f7a8d2-1c4e-4f9b-8a3d-6e7f2c5b1a09/secrets.json` and never committed to the repository.
+
 ### Run the tests
 
 ```bash
 dotnet test SapBddTests/SapBddTests.sln
 ```
 
-The test hooks will automatically start `MockSapServer` before the test run if it is not already running, and shut it down afterwards. If the server is already running, the hooks leave it alone.
+The test hooks will automatically start `MockSapServer` before the test run if it is not already running (passing the credentials from User Secrets as environment variables), and shut it down afterwards. If the server is already running, the hooks leave it alone.
 
 ### Scenarios covered
 
