@@ -14,7 +14,7 @@ public class Hooks
         if (IsServerAlreadyRunning())
             return;
 
-        var repoRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../.."));
+        var repoRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../.."));
         var serverScript = Path.Combine(repoRoot, "MockSapServer", "src", "server.js");
 
         _serverProcess = new Process
