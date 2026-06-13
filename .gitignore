@@ -1,2 +1,8 @@
-node_modules/
+# MockSapServer
+MockSapServer/node_modules/
 .env
+
+# SapBddTests
+SapBddTests/**/bin/
+SapBddTests/**/obj/
+*.user
