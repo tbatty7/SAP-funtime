@@ -208,7 +208,11 @@ curl -u sapuser:Passw0rd! -X POST http://localhost:3054/RESTAdapter/WO/CreateUpd
 
 ### Configuration — User Secrets
 
-The tests read credentials from [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets). Before running the tests for the first time, store the credentials (these must match the server's `BASIC_AUTH_USER` / `BASIC_AUTH_PASS`):
+The tests read credentials from [.NET User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets). Secrets are stored outside the repository at `~/.microsoft/usersecrets/b3f7a8d2-1c4e-4f9b-8a3d-6e7f2c5b1a09/secrets.json` and are never committed.
+
+The credentials must match the server's `BASIC_AUTH_USER` / `BASIC_AUTH_PASS` values. Set them using whichever method suits your environment:
+
+#### Terminal
 
 ```bash
 cd SapBddTests
@@ -216,7 +220,34 @@ dotnet user-secrets set "MockSap:Username" "sapuser"
 dotnet user-secrets set "MockSap:Password" "Passw0rd!"
 ```
 
-Secrets are stored in `~/.microsoft/usersecrets/b3f7a8d2-1c4e-4f9b-8a3d-6e7f2c5b1a09/secrets.json` and never committed to the repository.
+#### JetBrains Rider
+
+1. In the **Solution Explorer**, right-click the `SapBddTests` project
+2. Select **Tools → Open Project User Secrets**
+3. Rider opens `secrets.json` directly — add the credentials:
+
+```json
+{
+  "MockSap:Username": "sapuser",
+  "MockSap:Password": "Passw0rd!"
+}
+```
+
+#### Visual Studio Code
+
+1. Install the [**.NET User Secrets**](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets) extension
+2. In the **Explorer**, right-click `SapBddTests.csproj`
+3. Select **Manage User Secrets**
+4. VS Code opens `secrets.json` — add the credentials:
+
+```json
+{
+  "MockSap:Username": "sapuser",
+  "MockSap:Password": "Passw0rd!"
+}
+```
+
+Alternatively, open the file directly at `~/.microsoft/usersecrets/b3f7a8d2-1c4e-4f9b-8a3d-6e7f2c5b1a09/secrets.json` in any editor.
 
 ### Run the tests
 
