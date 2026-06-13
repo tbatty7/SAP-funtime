@@ -14,7 +14,7 @@ router.get('/GetDetails/:orderNumber', (req, res) => {
 });
 
 router.post('/CreateUpdate', (req, res) => {
-  const { METHOD_TYPE, ORDERNO, IT_OPERATION_UP } = req.body || {};
+  const { METHOD_TYPE, ORDERNO, IT_OPERATION, IT_OPERATION_UP } = req.body || {};
 
   if (METHOD_TYPE !== 'CHANGE') {
     return res.status(200).json(buildReturn('E', 'IW', '016',
@@ -31,10 +31,19 @@ router.post('/CreateUpdate', (req, res) => {
       paddedOrderNumber, 'ORDERNO'));
   }
 
-  const updates = (IT_OPERATION_UP && IT_OPERATION_UP.item) || [];
+  const ALLOWED_FIELDS = [
+    'CONTROL_KEY', 'WORK_CNTR', 'PLANT', 'DESCRIPTION', 'QUANTITY',
+    'CURRENCY', 'CURRENCY_ISO', 'NUMBER_OF_CAPACITIES', 'PERCENT_OF_WORK',
+    'GR_RCPT', 'PERS_NO',
+    'EARL_SCHED_START_DATE', 'EARL_SCHED_FIN_DATE',
+    'LATE_SCHED_START_DATE', 'LATE_SCHED_FIN_DATE'
+  ];
 
-  for (const update of updates) {
-    const { ACTIVITY, ...fields } = update;
+  const indicators = (IT_OPERATION_UP && IT_OPERATION_UP.item) || [];
+  const values     = (IT_OPERATION    && IT_OPERATION.item)    || [];
+
+  for (const indicator of indicators) {
+    const { ACTIVITY } = indicator;
     if (!ACTIVITY) {
       return res.status(200).json(buildReturn('E', 'IW', '017',
         'ACTIVITY is required on each IT_OPERATION_UP item', '', 'ACTIVITY'));
@@ -47,17 +56,11 @@ router.post('/CreateUpdate', (req, res) => {
         ACTIVITY, 'ACTIVITY'));
     }
 
-    const ALLOWED_FIELDS = [
-      'CONTROL_KEY', 'WORK_CNTR', 'PLANT', 'DESCRIPTION', 'QUANTITY',
-      'CURRENCY', 'CURRENCY_ISO', 'NUMBER_OF_CAPACITIES', 'PERCENT_OF_WORK',
-      'GR_RCPT', 'PERS_NO',
-      'EARL_SCHED_START_DATE', 'EARL_SCHED_FIN_DATE',
-      'LATE_SCHED_START_DATE', 'LATE_SCHED_FIN_DATE'
-    ];
+    const valueRow = values.find(v => v.ACTIVITY === ACTIVITY) || {};
 
     for (const field of ALLOWED_FIELDS) {
-      if (fields[field] !== undefined) {
-        op[field] = fields[field];
+      if (indicator[field] === 'X') {
+        op[field] = valueRow[field] !== undefined ? valueRow[field] : op[field];
       }
     }
   }
