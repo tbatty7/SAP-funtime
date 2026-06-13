@@ -1,9 +1,30 @@
 const express = require('express');
 const workOrderRoutes = require('./routes/workOrders');
 
+const BASIC_AUTH_USER = process.env.BASIC_AUTH_USER || 'sapuser';
+const BASIC_AUTH_PASS = process.env.BASIC_AUTH_PASS || 'Passw0rd!';
+
+function basicAuth(req, res, next) {
+  const header = req.headers['authorization'];
+  if (!header || !header.startsWith('Basic ')) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="SAP Mock"');
+    return res.status(401).json({ MESSAGE: 'Unauthorized' });
+  }
+  const decoded = Buffer.from(header.slice(6), 'base64').toString('utf8');
+  const colonIdx = decoded.indexOf(':');
+  const user = decoded.slice(0, colonIdx);
+  const pass = decoded.slice(colonIdx + 1);
+  if (user !== BASIC_AUTH_USER || pass !== BASIC_AUTH_PASS) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="SAP Mock"');
+    return res.status(401).json({ MESSAGE: 'Unauthorized' });
+  }
+  next();
+}
+
 const app = express();
 
 app.use(express.json());
+app.use(basicAuth);
 app.use('/RESTAdapter/WO', workOrderRoutes);
 
 app.use((req, res) => {

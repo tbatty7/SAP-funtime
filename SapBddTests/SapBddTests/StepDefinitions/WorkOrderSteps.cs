@@ -1,15 +1,28 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using NUnit.Framework;
 using Reqnroll;
+using SapBddTests.Support;
 
 namespace SapBddTests.StepDefinitions;
 
 [Binding]
 public class WorkOrderSteps
 {
-    private static readonly HttpClient Client = new() { BaseAddress = new Uri("http://localhost:3054") };
+    private static readonly HttpClient Client = CreateClient();
+
+    private static HttpClient CreateClient()
+    {
+        var credentials = Convert.ToBase64String(
+            Encoding.ASCII.GetBytes($"{TestConfiguration.Username}:{TestConfiguration.Password}"));
+
+        var client = new HttpClient { BaseAddress = new Uri("http://localhost:3054") };
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Basic", credentials);
+        return client;
+    }
 
     private HttpResponseMessage _response = null!;
     private JsonElement _body;

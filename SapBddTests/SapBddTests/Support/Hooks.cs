@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net;
 using Reqnroll;
 
 namespace SapBddTests.Support;
@@ -25,7 +26,12 @@ public class Hooks
                 Arguments = serverScript,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+                EnvironmentVariables =
+                {
+                    ["BASIC_AUTH_USER"] = TestConfiguration.Username,
+                    ["BASIC_AUTH_PASS"] = TestConfiguration.Password
+                }
             }
         };
 
@@ -51,7 +57,8 @@ public class Hooks
             using var client = new System.Net.Http.HttpClient();
             client.Timeout = TimeSpan.FromSeconds(2);
             var response = client.GetAsync("http://localhost:3054/RESTAdapter/WO/GetDetails/000004000001").GetAwaiter().GetResult();
-            return response.IsSuccessStatusCode;
+            // 401 means the server is up but rejecting our unauthenticated ping — that's fine
+            return response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.Unauthorized;
         }
         catch
         {
