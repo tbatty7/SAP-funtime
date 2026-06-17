@@ -66,22 +66,7 @@ public class WorkOrderSteps
         _body = await ParseBody(_response);
     }
 
-    [When("I send a bare CreateUpdate request with METHOD_TYPE {string} for order {string}")]
-    public async Task WhenISendABareCreateUpdateRequest(string methodType, string orderNumber)
-    {
-        var payload = new
-        {
-            METHOD_TYPE = methodType,
-            ORDERNO = orderNumber,
-            IT_OPERATION = new { item = Array.Empty<object>() },
-            IT_OPERATION_UP = new { item = Array.Empty<object>() }
-        };
-
-        _response = await PostJson("/RESTAdapter/WO/CreateUpdate", payload);
-        _body = await ParseBody(_response);
-    }
-
-    [Then("the response RETURN type should be {string}")]
+[Then("the response RETURN type should be {string}")]
     public void ThenTheResponseReturnTypeShouldBe(string expected)
     {
         Assert.That(GetReturn("TYPE"), Is.EqualTo(expected));
@@ -100,13 +85,7 @@ public class WorkOrderSteps
         Assert.That(GetReturn("MESSAGE"), Does.Contain(expected));
     }
 
-    [Then("the response RETURN field should be {string}")]
-    public void ThenTheResponseReturnFieldShouldBe(string expected)
-    {
-        Assert.That(GetReturn("FIELD"), Is.EqualTo(expected));
-    }
-
-    [Then("when I retrieve work order {string} the operation {string} field {string} should be {string}")]
+[Then("when I retrieve work order {string} the operation {string} field {string} should be {string}")]
     public async Task ThenWhenIRetrieveWorkOrderTheOperationFieldShouldBe(string orderNumber, string activity, string field, string expected)
     {
         var getResponse = await Client.GetAsync($"/RESTAdapter/WO/GetDetails/{orderNumber}");

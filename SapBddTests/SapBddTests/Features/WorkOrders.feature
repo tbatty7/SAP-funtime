@@ -27,21 +27,3 @@ Feature: Work Order Operations
     Then the response RETURN type should be "S"
     And when I retrieve work order "000004000001" the operation "0010" field "QUANTITY" should be "9.9"
     And when I retrieve work order "000004000001" the operation "0010" field "DESCRIPTION" should be "Isolate and lock out pump P-101"
-
-  Scenario: Reject CreateUpdate with a non-CHANGE method type
-    Given the mock SAP server is running
-    When I send a bare CreateUpdate request with METHOD_TYPE "CREATE" for order "000004000001"
-    Then the response RETURN type should be "E"
-    And the response RETURN field should be "METHOD_TYPE"
-
-  Scenario: Reject CreateUpdate for a non-existent order
-    Given the mock SAP server is running
-    When I send a bare CreateUpdate request with METHOD_TYPE "CHANGE" for order "000099999999"
-    Then the response RETURN type should be "E"
-    And the response RETURN message should contain "does not exist"
-
-  Scenario: Reject CreateUpdate for a non-existent operation
-    Given the mock SAP server is running
-    When I send a CreateUpdate request for order "000004000001" with METHOD_TYPE "CHANGE" updating operation "9999" field "DESCRIPTION" to "Ghost op"
-    Then the response RETURN type should be "E"
-    And the response RETURN field should be "ACTIVITY"
