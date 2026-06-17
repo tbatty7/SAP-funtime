@@ -107,7 +107,7 @@ namespace SapBddTests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/WorkOrders.feature.ndjson", 9);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/WorkOrders.feature.ndjson", 6);
         }
         
         [global::NUnit.Framework.TestAttribute()]
@@ -257,117 +257,6 @@ namespace SapBddTests.Features
 #line 29
     await testRunner.AndAsync("when I retrieve work order \"000004000001\" the operation \"0010\" field \"DESCRIPTION" +
                         "\" should be \"Isolate and lock out pump P-101\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Reject CreateUpdate with a non-CHANGE method type")]
-        public async global::System.Threading.Tasks.Task RejectCreateUpdateWithANon_CHANGEMethodType()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "4";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Reject CreateUpdate with a non-CHANGE method type", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 31
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 32
-    await testRunner.GivenAsync("the mock SAP server is running", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 33
-    await testRunner.WhenAsync("I send a bare CreateUpdate request with METHOD_TYPE \"CREATE\" for order \"000004000" +
-                        "001\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 34
-    await testRunner.ThenAsync("the response RETURN type should be \"E\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 35
-    await testRunner.AndAsync("the response RETURN field should be \"METHOD_TYPE\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Reject CreateUpdate for a non-existent order")]
-        public async global::System.Threading.Tasks.Task RejectCreateUpdateForANon_ExistentOrder()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "5";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Reject CreateUpdate for a non-existent order", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 37
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 38
-    await testRunner.GivenAsync("the mock SAP server is running", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 39
-    await testRunner.WhenAsync("I send a bare CreateUpdate request with METHOD_TYPE \"CHANGE\" for order \"000099999" +
-                        "999\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 40
-    await testRunner.ThenAsync("the response RETURN type should be \"E\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 41
-    await testRunner.AndAsync("the response RETURN message should contain \"does not exist\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Reject CreateUpdate for a non-existent operation")]
-        public async global::System.Threading.Tasks.Task RejectCreateUpdateForANon_ExistentOperation()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "6";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Reject CreateUpdate for a non-existent operation", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 43
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 44
-    await testRunner.GivenAsync("the mock SAP server is running", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 45
-    await testRunner.WhenAsync("I send a CreateUpdate request for order \"000004000001\" with METHOD_TYPE \"CHANGE\" " +
-                        "updating operation \"9999\" field \"DESCRIPTION\" to \"Ghost op\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 46
-    await testRunner.ThenAsync("the response RETURN type should be \"E\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 47
-    await testRunner.AndAsync("the response RETURN field should be \"ACTIVITY\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
